@@ -14,7 +14,7 @@ namespace MainApplication.Routing
     /// <summary>
     /// A component that supplies route data corresponding to the current navigation state.
     /// </summary>
-    public partial class CustomRouter : IComponent, IHandleAfterRender, IDisposable
+    public class ModuleRouter : IComponent, IHandleAfterRender, IDisposable
     {
         static readonly char[] _queryOrHashStartChar = new[] { '?', '#' };
         static readonly ReadOnlyDictionary<string, object> _emptyParametersDictionary
@@ -31,6 +31,8 @@ namespace MainApplication.Routing
         [Inject] private INavigationInterception NavigationInterception { get; set; }
 
         [Inject] private ILoggerFactory LoggerFactory { get; set; }
+
+        [Inject] public ModuleManager ModuleManager { get; set; }
 
         /// <summary>
         /// Gets or sets the assembly that should be searched for components matching the URI.
@@ -53,8 +55,6 @@ namespace MainApplication.Routing
         /// </summary>
         [Parameter] public RenderFragment<RouteData> Found { get; set; }
 
-        [Parameter] public ModuleManager ModuleManager { get; set; }
-
         private RouteTable Routes { get; set; }
 
         /// <inheritdoc />
@@ -65,6 +65,7 @@ namespace MainApplication.Routing
             _baseUri = NavigationManager.BaseUri;
             _locationAbsolute = NavigationManager.Uri;
             NavigationManager.LocationChanged += OnLocationChanged;
+            ModuleManager.OnModulesLoaded += OnModulesLoaded;
         }
 
         /// <inheritdoc />
@@ -92,22 +93,17 @@ namespace MainApplication.Routing
                 throw new InvalidOperationException($"The {nameof(Router)} component requires a value for the parameter {nameof(NotFound)}.");
             }
 
-            if (ModuleManager != null)
-            {
-                ModuleManager.OnModulesLoaded += OnModulesLoaded;
-            }
-
             var assemblies = AdditionalAssemblies == null ? new[] { AppAssembly } : new[] { AppAssembly }.Concat(AdditionalAssemblies);
             Routes = RouteTableFactory.Create(assemblies);
             Refresh(isNavigationIntercepted: false);
             return Task.CompletedTask;
         }
 
-        public async void OnModulesLoaded()
+        public async void OnModulesLoaded(IEnumerable<Assembly> modules)
         {
             var dict = new Dictionary<string, object>
             {
-                { "AdditionalAssemblies", ModuleManager.Modules }
+                { "AdditionalAssemblies", modules }
             };
 
             var pv = ParameterView.FromDictionary(dict);
