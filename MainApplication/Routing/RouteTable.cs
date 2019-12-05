@@ -1,25 +1,25 @@
-﻿namespace MainApplication.Routing
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+namespace MainApplication.Routing
 {
-    public partial class CustomRouter
+    internal class RouteTable
     {
-        internal class RouteTable
+        public RouteTable(RouteEntry[] routes)
         {
-            public RouteTable(RouteEntry[] routes)
-            {
-                Routes = routes;
-            }
+            Routes = routes;
+        }
 
-            public RouteEntry[] Routes { get; }
+        public RouteEntry[] Routes { get; }
 
-            internal void Route(RouteContext routeContext)
+        internal void Route(RouteContext routeContext)
+        {
+            for (var i = 0; i < Routes.Length; i++)
             {
-                for (var i = 0; i < Routes.Length; i++)
+                Routes[i].Match(routeContext);
+                if (routeContext.Handler != null)
                 {
-                    Routes[i].Match(routeContext);
-                    if (routeContext.Handler != null)
-                    {
-                        return;
-                    }
+                    return;
                 }
             }
         }

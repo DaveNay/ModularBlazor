@@ -1,22 +1,22 @@
-﻿using System.Diagnostics;
+﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+
+using System.Diagnostics;
 
 namespace MainApplication.Routing
 {
-    public partial class CustomRouter
+    [DebuggerDisplay("{TemplateText}")]
+    internal class RouteTemplate
     {
-        [DebuggerDisplay("{TemplateText}")]
-        internal class RouteTemplate
+        public RouteTemplate(string templateText, TemplateSegment[] segments)
         {
-            public RouteTemplate(string templateText, TemplateSegment[] segments)
-            {
-                TemplateText = templateText;
-                Segments = segments;
-            }
-
-            public string TemplateText { get; }
-
-            public TemplateSegment[] Segments { get; }
+            TemplateText = templateText;
+            Segments = segments;
         }
 
+        public string TemplateText { get; }
+
+        public TemplateSegment[] Segments { get; }
     }
 }

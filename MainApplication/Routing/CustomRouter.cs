@@ -70,11 +70,6 @@ namespace MainApplication.Routing
         /// <inheritdoc />
         public Task SetParametersAsync(ParameterView parameters)
         {
-            if (ModuleManager != null && parameters.TryGetValue<ModuleManager>("ModuleManager", out var mm))
-            {
-                ModuleManager.OnModulesLoaded -= OnModulesLoaded;
-            }
-
             parameters.SetParameterProperties(this);
 
             if (AppAssembly == null)
