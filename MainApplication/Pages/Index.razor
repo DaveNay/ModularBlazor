@@ -1,0 +1,32 @@
+﻿@page "/"
+
+@using MainApplication.Services
+@inject ModuleManager ModuleManager
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@if (ModuleManager.Loaded)
+{
+    <p>Modules are loaded. Please click button to unload.</p>
+    <button class="btn btn-primary" @onclick="UnloadModules">Unload Modules</button>
+}
+else
+{
+    <p>Modules are not loaded. Please click button to load.</p>
+    <button class="btn btn-primary" @onclick="LoadModules">Load Modules</button>
+}
+
+@code {
+    private void LoadModules()
+    {
+        ModuleManager.LoadModules();
+    }
+
+    private void UnloadModules()
+    {
+        ModuleManager.UnloadModules();
+    }
+}
+
