@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace MainApplication.Serrvices
+namespace MainApplication.Services
 {
     internal class PluginLoadContext : AssemblyLoadContext
     {
