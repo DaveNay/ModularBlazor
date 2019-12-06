@@ -31,7 +31,7 @@
             @foreach (var assembly in Modules)
             {
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="@($"{assembly.GetName().Name}page1")">
+                    <NavLink class="nav-link" href="@($"{assembly.GetName().Name}/Home")">
                         <span class="oi oi-list-rich" aria-hidden="true"></span> @assembly.GetName().Name
                     </NavLink>
                 </li>
