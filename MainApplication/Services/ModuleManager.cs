@@ -7,9 +7,9 @@ namespace MainApplication.Services
 {
     public class ModuleManager
     {
-        private Dictionary<PluginLoadContext, Assembly> _loadContexts = new Dictionary<PluginLoadContext, Assembly>();
+        private readonly Dictionary<PluginLoadContext, Assembly> _loadContexts = new Dictionary<PluginLoadContext, Assembly>();
 
-        public event Action<IEnumerable<Assembly>> OnModulesLoaded;
+        public event Action<IEnumerable<Assembly>> OnModulesChanged;
 
         public bool Loaded { get; private set; }
 
@@ -27,7 +27,7 @@ namespace MainApplication.Services
                 _loadContexts.Add(pluginLoadContext, assembly);
             }
 
-            OnModulesLoaded?.Invoke(_loadContexts.Values);
+            OnModulesChanged?.Invoke(_loadContexts.Values);
             Loaded = true;
         }
 
@@ -38,8 +38,9 @@ namespace MainApplication.Services
                 pluginLoadContext.Key.Unload();
             }
 
-            OnModulesLoaded?.Invoke(null);
             _loadContexts.Clear();
+
+            OnModulesChanged?.Invoke(_loadContexts.Values);
             Loaded = false;
         }
 

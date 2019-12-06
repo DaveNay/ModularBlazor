@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Components.Routing;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace MainApplication.Routing
 {
@@ -15,21 +14,16 @@ namespace MainApplication.Routing
         public new void Attach(RenderHandle renderHandle)
         {
             base.Attach(renderHandle);
-            ModuleManager.OnModulesLoaded += OnModulesLoaded;
+            ModuleManager.OnModulesChanged += OnModulesChanged;
         }
 
         public new void Dispose()
         {
             base.Dispose();
-            ModuleManager.OnModulesLoaded -= OnModulesLoaded;
+            ModuleManager.OnModulesChanged -= OnModulesChanged;
         }
 
-        public new async Task SetParametersAsync(ParameterView parameters)
-        {
-            await base.SetParametersAsync(parameters);
-        }
-
-        private async void OnModulesLoaded(IEnumerable<Assembly> modules)
+        private async void OnModulesChanged(IEnumerable<Assembly> modules)
         {
             var dict = new Dictionary<string, object>
             {
