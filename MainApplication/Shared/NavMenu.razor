@@ -1,4 +1,8 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@using MainApplication.Services
+@using System.Reflection;
+@inject ModuleManager ModuleManager
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">MainApplication</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -22,16 +26,17 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="module1page1">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Module 1
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="module2page1">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Module 2
-            </NavLink>
-        </li>
+        @if (Modules != null)
+        {
+            @foreach (var assembly in Modules)
+            {
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="@($"{assembly.GetName().Name}page1")">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> @assembly.GetName().Name
+                    </NavLink>
+                </li>
+            }
+        }
     </ul>
 </div>
 
@@ -40,8 +45,24 @@
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    private IEnumerable<Assembly> Modules;
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override void OnInitialized()
+    {
+        ModuleManager.OnModulesChanged += OnModulesChanged;
+    }
+
+    private async void OnModulesChanged(IEnumerable<Assembly> modules)
+    {
+        await InvokeAsync(() =>
+        {
+            Modules = modules;
+            StateHasChanged();
+        });
     }
 }
