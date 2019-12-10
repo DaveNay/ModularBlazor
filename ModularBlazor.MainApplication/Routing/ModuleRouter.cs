@@ -1,11 +1,11 @@
-﻿using MainApplication.Services;
+﻿using ModularBlazor.MainApplication.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
 
-namespace MainApplication.Routing
+namespace ModularBlazor.MainApplication.Routing
 {
     public class ModuleRouter : Router, IComponent, IDisposable
     {
@@ -23,11 +23,13 @@ namespace MainApplication.Routing
             ModuleManager.OnModulesChanged -= OnModulesChanged;
         }
 
-        private async void OnModulesChanged(IEnumerable<Assembly> modules)
+        private async void OnModulesChanged(IEnumerable<ModuleInfo> modules)
         {
+            var assemblies = modules.Select(module => module.Assembly);
+
             var dict = new Dictionary<string, object>
             {
-                { "AdditionalAssemblies", modules }
+                { "AdditionalAssemblies", assemblies }
             };
 
             var pv = ParameterView.FromDictionary(dict);

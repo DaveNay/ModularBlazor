@@ -14,4 +14,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ModularBlazor.Shared\ModularBlazor.Shared.csproj" >
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
 </Project>

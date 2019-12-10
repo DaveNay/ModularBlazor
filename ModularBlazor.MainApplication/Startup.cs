@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MainApplication.Data;
-using MainApplication.Services;
+using ModularBlazor.MainApplication.Data;
+using ModularBlazor.MainApplication.Services;
 
-namespace MainApplication
+namespace ModularBlazor.MainApplication
 {
     public class Startup
     {

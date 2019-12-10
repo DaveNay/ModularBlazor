@@ -1,6 +1,6 @@
 using System;
 
-namespace MainApplication.Data
+namespace ModularBlazor.MainApplication.Data
 {
     public class WeatherForecast
     {

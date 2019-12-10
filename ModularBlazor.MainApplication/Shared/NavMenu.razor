@@ -28,11 +28,11 @@
         </li>
         @if (Modules != null)
         {
-            @foreach (var assembly in Modules)
+            @foreach (var module in Modules)
             {
                 <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="@($"{assembly.GetName().Name}/Home")">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> @assembly.GetName().Name
+                    <NavLink class="nav-link" href="@module.URL">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> @module.NavigationLinkName
                     </NavLink>
                 </li>
             }
@@ -45,7 +45,7 @@
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private IEnumerable<Assembly> Modules;
+    private IEnumerable<ModuleInfo> Modules;
 
     private void ToggleNavMenu()
     {
@@ -57,7 +57,7 @@
         ModuleManager.OnModulesChanged += OnModulesChanged;
     }
 
-    private async void OnModulesChanged(IEnumerable<Assembly> modules)
+    private async void OnModulesChanged(IEnumerable<ModuleInfo> modules)
     {
         await InvokeAsync(() =>
         {
